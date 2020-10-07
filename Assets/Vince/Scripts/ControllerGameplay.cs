@@ -56,6 +56,11 @@ public class ControllerGameplay : MonoBehaviour
             int x = i % 7;
             int y = i / 6;
             boardUI[x, y].SetOwner(b);
+
+            if (b != 0)
+            {
+                print($"b: {b} | x: {x} | y: {y} ");
+            }
         }
     }
 }

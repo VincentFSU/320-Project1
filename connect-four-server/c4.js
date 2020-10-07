@@ -5,9 +5,12 @@ const Game = {
     whoseTurn:1,
     whoHasWon:0,
     board:[ 
-        [0,0,0],
-        [0,0,0],
-        [0,0,0],
+        [0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0]
     ],
     clientRed:null, // player 1
     clientBlue:null, // player 2

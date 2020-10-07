@@ -10,7 +10,7 @@ exports.PacketBuilder = {
 
     },
     update(game){
-        const packet = Buffer.alloc(15);
+        const packet = Buffer.alloc(48);
         packet.write("UPDT", 0);
         packet.writeUInt8(game.whoseTurn, 4);
         packet.writeUInt8(game.whoHasWon, 5);

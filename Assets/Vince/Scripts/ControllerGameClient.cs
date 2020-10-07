@@ -160,14 +160,14 @@ public class ControllerGameClient : MonoBehaviour
                 byte whoseTurn = buffer.ReadUInt8(4);
                 byte gameStatus = buffer.ReadUInt8(5);
 
-                byte[] spaces = new byte[9];
-                for (int i = 0; i < 9; i++)
+                byte[] spaces = new byte[42];
+                for (int i = 0; i < 42; i++)
                 {
                     spaces[i] = buffer.ReadUInt8(6 + i);
                 }
                 SwitchToPanel(Panel.Gameplay);
                 panelGameplay.UpdateFromServer(gameStatus, whoseTurn, spaces);
-                buffer.Consume(15);
+                buffer.Consume(48);
                 break;
             case "CHAT":
                 byte usernameLength = buffer.ReadByte(4);

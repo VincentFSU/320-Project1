@@ -36,4 +36,20 @@ public class ButtonGamePiece : MonoBehaviour
     {
         print("Ooh that tickles...");
     }
+
+    public void SetOwner(byte b)
+    {
+        if (b == 0)
+        {
+            //textField.text = "";
+        }
+        if (b == 1)
+        {
+            //textField.text = "X";
+        }
+        if (b == 2)
+        {
+            //textField.text = "O";
+        }
+    }
 }

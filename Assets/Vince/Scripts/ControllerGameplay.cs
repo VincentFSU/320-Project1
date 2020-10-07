@@ -48,10 +48,15 @@ public class ControllerGameplay : MonoBehaviour
         //print($"X:{bttn.pos.X} Y:{bttn.pos.Y} was clicked");
         print($"Button was clicked. {bttn.pos} ");
     }
-
-    // Update is called once per frame
-    void Update()
+    
+    public void UpdateFromServer(byte gameStatus, byte whoseTurn, byte[] spaces)
     {
-
+        for (int i = 0; i < spaces.Length; i++)
+        {
+            byte b = spaces[i];
+            int x = i % 7;
+            int y = i / 6;
+            boardUI[x, y].SetOwner(b);
+        }
     }
 }

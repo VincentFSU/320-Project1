@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Animations;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -22,10 +23,16 @@ public struct GridPOS
 public class ButtonGamePiece : MonoBehaviour
 {
     public GridPOS pos;
+    public Sprite spriteEmpty;
+    public Sprite spriteRed;
+    public Sprite spriteBlue;
+
+    private Button bttn;
+
     public void Init(GridPOS pos, UnityAction callback)
     {
         this.pos = pos;
-        Button bttn = GetComponent<Button>();
+        bttn = GetComponent<Button>();
 
         //bttn.onClick.AddListener(new UnityEngine.Events.UnityAction(ButtonClicked));
         //bttn.onClick.AddListener(() => ButtonClicked());
@@ -41,14 +48,17 @@ public class ButtonGamePiece : MonoBehaviour
     {
         if (b == 0)
         {
+            bttn.image.sprite = spriteEmpty;
             //textField.text = "";
         }
         if (b == 1)
         {
+            bttn.image.sprite = spriteRed;
             //textField.text = "X";
         }
         if (b == 2)
         {
+            bttn.image.sprite = spriteBlue;
             //textField.text = "O";
         }
     }

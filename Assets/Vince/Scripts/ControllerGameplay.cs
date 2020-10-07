@@ -45,8 +45,7 @@ public class ControllerGameplay : MonoBehaviour
 
     void ButtonClicked(ButtonGamePiece bttn)
     {
-        //print($"X:{bttn.pos.X} Y:{bttn.pos.Y} was clicked");
-        print($"Button was clicked. {bttn.pos} ");
+        ControllerGameClient.singleton.SendPlayPacket(bttn.pos.X, bttn.pos.Y);
     }
     
     public void UpdateFromServer(byte gameStatus, byte whoseTurn, byte[] spaces)

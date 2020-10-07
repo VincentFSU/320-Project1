@@ -14,7 +14,7 @@ public enum Panel
 }
 public class ControllerGameClient : MonoBehaviour
 {
-    static ControllerGameClient singleton;
+    static public ControllerGameClient singleton;
 
     TcpClient socket = new TcpClient();
 
@@ -195,7 +195,7 @@ public class ControllerGameClient : MonoBehaviour
         await socket.GetStream().WriteAsync(packet.bytes, 0, packet.bytes.Length);
     }
 
-    public void SendPlayPacket()
+    public void SendPlayPacket(int x, int y)
     {
         Buffer packet = PacketBuilder.Play(x, y);
         SendPacketToServer(packet);

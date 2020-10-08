@@ -54,13 +54,13 @@ public class ControllerGameplay : MonoBehaviour
         {
             byte b = spaces[i];
             int x = i % 7;
-            int y = i / 6;
+            int y = i / 7;
             boardUI[x, y].SetOwner(b);
 
-            if (b != 0)
-            {
-                print($"b: {b} | x: {x} | y: {y} ");
-            }
+            //if (b != 0)
+            //{
+                //print($"b: {b} | x: {x} | y: {y} ");
+            //}
         }
     }
 }

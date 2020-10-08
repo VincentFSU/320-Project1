@@ -54,11 +54,13 @@ public class ButtonGamePiece : MonoBehaviour
         if (b == 1)
         {
             bttn.image.sprite = spriteRed;
+            //print($"X: {pos.X}, Y: {pos.Y}");
             //textField.text = "X";
         }
         if (b == 2)
         {
             bttn.image.sprite = spriteBlue;
+            //print($"X: {pos.X}, Y: {pos.Y}");
             //textField.text = "O";
         }
     }

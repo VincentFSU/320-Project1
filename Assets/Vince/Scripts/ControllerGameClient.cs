@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Sockets;
 using TMPro;
 using System;
+using System.Security.Cryptography;
 
 public enum Panel
 {
@@ -155,19 +156,24 @@ public class ControllerGameClient : MonoBehaviour
                 buffer.Consume(5);
                 break;
             case "UPDT":
-                if (buffer.Length < 15) return; // not enough data for an UPDT packet
-
+                if (buffer.Length < 48) return; // not enough data for an UPDT packet
+                
                 byte whoseTurn = buffer.ReadUInt8(4);
                 byte gameStatus = buffer.ReadUInt8(5);
-
+                if (gameStatus != 0)
+                {
+                    print($"WINNER: {gameStatus}");
+                }
+                //print(buffer);
                 byte[] spaces = new byte[42];
                 for (int i = 0; i < 42; i++)
                 {
                     spaces[i] = buffer.ReadUInt8(6 + i);
                 }
                 SwitchToPanel(Panel.Gameplay);
-                panelGameplay.UpdateFromServer(gameStatus, whoseTurn, spaces);
+                //print(buffer);
                 buffer.Consume(48);
+                panelGameplay.UpdateFromServer(gameStatus, whoseTurn, spaces);
                 break;
             case "CHAT":
                 byte usernameLength = buffer.ReadByte(4);

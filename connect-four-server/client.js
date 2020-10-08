@@ -48,11 +48,20 @@ exports.Client = class Client {
                 const packet = PacketBuilder.join(responseId);
                 this.sendPacket(packet);
 
+                if (responseId <= 3 && responseId > 0) this.username = desiredUsername;
+
                 const packet2 = PacketBuilder.update(this.server.game);
                 this.sendPacket(packet2);
 
                  break;
-            case "CHAT": break;
+            case "CHAT": 
+                if(this.buffer.length < 6) return; // not enough data...
+                const msgLength = this.buffer.readUInt8(4);
+                const msg = this.buffer.slice(5, 5+msgLength).toString();
+
+                const msgPacket = PacketBuilder.chat(this.username, msg);
+                this.server.broadcastPacket(msgPacket);
+            break;
             case "PLAY": 
                 if(this.buffer.length < 6) return; // not enough data...
                 const x = this.buffer.readUInt8(4);

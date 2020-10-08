@@ -51,7 +51,7 @@ UPDT - The state of the game
     0   4   ASCII       packet type: "UPDT"
     4   1   uint8       whose turn (1 | 2)
     5   1   uint8       who's won? (see below)
-    6   42   uint8 x42    the values in spots 1-42
+    6   42  uint8 x42   the values in spots 1-42
 
     who's won
     ----------------------------------------------------------

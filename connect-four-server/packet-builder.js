@@ -6,8 +6,14 @@ exports.PacketBuilder = {
 
         return packet;
     },
-    chat(){
-
+    chat(username, message){
+        const packet = Buffer.alloc(7 + username.length + message.length);
+        packet.write("CHAT", 0);
+        packet.writeUInt8(username.length, 4);
+        packet.writeUInt16BE(message.length, 5);
+        packet.write(username, 7);
+        packet.write(message, 7 + username.length);
+        return packet;
     },
     update(game){
         const packet = Buffer.alloc(48);

@@ -141,6 +141,7 @@ public class ControllerGameClient : MonoBehaviour
                 if (joinResponse == 1 || joinResponse == 2 || joinResponse == 3)
                 {
                     SwitchToPanel(Panel.Gameplay);
+
                 }
                 else if (joinResponse == 9)
                 {
@@ -186,6 +187,8 @@ public class ControllerGameClient : MonoBehaviour
                 string username = buffer.ReadString(7, usernameLength);
                 string message = buffer.ReadString(7 + usernameLength, messageLength);
 
+                print($"{username}: {message}");
+
                 buffer.Consume(7 + usernameLength + messageLength);
                 break;
             default:
@@ -204,6 +207,12 @@ public class ControllerGameClient : MonoBehaviour
     public void SendPlayPacket(int x, int y)
     {
         Buffer packet = PacketBuilder.Play(x, y);
+        SendPacketToServer(packet);
+    }
+
+    public void SendChatPacket(string msg)
+    {
+        Buffer packet = PacketBuilder.Chat(msg);
         SendPacketToServer(packet);
     }
 }

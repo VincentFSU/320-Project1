@@ -46,12 +46,12 @@ const Game = {
 
         yMax = this.board.length;
         xMax = this.board[0].length;
+        i = 0;
         for (y = 0; y < yMax; y++) { 
             for (x = 0; x < xMax; x++) { 
-                player = this.board[y][x];
+                player = this.board[y][x];                
                 if (player == 0)
                     continue;
-
                     // check right
                 if (x + 3 < xMax && player == this.board[y][x+1] && player == this.board[y][x+2] && player == this.board[y][x+3])
                     this.whoHasWon = player;
@@ -65,14 +65,23 @@ const Game = {
                     if (x + 3 < xMax && player == this.board[y+1][x+1] && player == this.board[y+2][x+2] && player == this.board[y+3][x+3])
                         this.whoHasWon = player;
 
-                        //check diag left
+                        // check diag left
                     if (x - 3 >= 0 && player == this.board[y+1][x-1] && player == this.board[y+2][x-2] && player == this.board[y+3][x-3])
                         this.whoHasWon = player;
                  }
+                
+                 // check cats-game
+                 i++;
+                 if(i == yMax * xMax && this.whoHasWon == 0)
+                 {
+                     this.whoHasWon = 3;
+                 }
+ 
             }
         }
     },
     checkPlacement(x){
+        // place piece at the highest available row for the given column (lowest on board);
         yMax = this.board.length - 1;
         for (y = yMax; y >= 0; y--){
             if(this.board[y][x] == 0){
@@ -81,7 +90,22 @@ const Game = {
             }
         }
         return false;
-    }   
+    },
+    reset(){
+        console.log("Rematch called");
+        this.whoseTurn = 2;
+        this.whoHasWon = 0;
+        this.board = [ 
+        [0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0]
+        ];
+
+        this.checkStateAndUpdate();
+    }       
 };
 
 Server.start(Game);

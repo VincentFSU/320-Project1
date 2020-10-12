@@ -30,10 +30,27 @@ exports.Server = {
     onClientDisconnect(client){
         if(this.game.clientRed == client) this.game.clientRed = null;
         if(this.game.clientBlue == client) this.game.clientBlue = null;
-// TODO : select a spectator to take over
 
         const index = this.clients.indexOf(client);
         if(index >= 0) this.clients.splice(index, 1); //remove from array. Negative if can't find.
+
+        if(this.game.clientRed == null){
+            this.clients.forEach(c => {
+                if(c != this.game.clientRed && c != this.game.clientBlue) {
+                    this.game.clientRed = c;
+                    return; // set as clientRed
+                } 
+            });
+        }
+
+        if(this.game.clientBlue == null){
+            this.clients.forEach(c => {
+                if(c != this.game.clientRed && c != this.game.clientBlue) {
+                    this.game.clientBlue = c;
+                    return; // set as clientBlue
+                } 
+            });
+        }
     },
     onError(e){
         console.log("ERROR with listener: "+e);
@@ -64,22 +81,22 @@ exports.Server = {
         const regex2 = /(fuck|fvck|fuk|shit|damn|faggot|nigger|cunt|bitch|spic)/i;
         if(regex2.test(desiredUsername)) return 8; // username contains profanity
 
-        if(this.game.clientX == client) {
-            return 1; // keep as clientX
+        if(this.game.clientRed == client) {
+            return 1; // keep as clientRed
         } 
         
-        if(this.game.clientO == client) {
-            return 2; // keep as clientO
+        if(this.game.clientBlue == client) {
+            return 2; // keep as clientBlue
         }
 
         if(!this.game.clientRed) {
             this.game.clientRed = client;
-            return 1; // set as clientX
+            return 1; // set as clientRed
         } 
         
         if(!this.game.clientBlue) {
             this.game.clientBlue = client;
-            return 2; // set as clientO
+            return 2; // set as clientBlue
         }
 
         return 3; // set as spectator

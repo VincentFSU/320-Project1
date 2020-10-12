@@ -88,3 +88,9 @@ PLAY - This packet should be submitted when the player takes their turn.
     0   4   ASCII       packet type: "PLAY"
     4   1   uint8       X (column number)
     5   1   uint8       Y (row number)
+
+RMCH - This packet should be submitted when a player wants a fresh board.
+
+    O   L   Datatype    Desc
+    ----------------------------------------------------------
+    0   4   ASCII       packet type: "RMCH"

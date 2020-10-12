@@ -11,7 +11,8 @@ public enum Panel
 {
     Host,
     Username,
-    Gameplay
+    Gameplay,
+    GameOver
 }
 public class ControllerGameClient : MonoBehaviour
 {
@@ -25,8 +26,11 @@ public class ControllerGameClient : MonoBehaviour
     public TMP_InputField inputPort;
     public TMP_InputField inputUsername;
 
+    public TextMeshProUGUI winnerText;
+
     public Transform panelHostDetails;
     public Transform panelUsername;
+    public Transform panelGameOver;
     public ControllerGameplay panelGameplay;
 
     void Start()
@@ -57,16 +61,25 @@ public class ControllerGameClient : MonoBehaviour
                 panelHostDetails.gameObject.SetActive(true);
                 panelUsername.gameObject.SetActive(false);
                 panelGameplay.gameObject.SetActive(false);
+                panelGameOver.gameObject.SetActive(false);
                 break;
             case Panel.Username:
                 panelHostDetails.gameObject.SetActive(false);
                 panelUsername.gameObject.SetActive(true);
                 panelGameplay.gameObject.SetActive(false);
+                panelGameOver.gameObject.SetActive(false);
                 break;
             case Panel.Gameplay:
                 panelHostDetails.gameObject.SetActive(false);
                 panelUsername.gameObject.SetActive(false);
                 panelGameplay.gameObject.SetActive(true);
+                panelGameOver.gameObject.SetActive(false);
+                break;
+            case Panel.GameOver:
+                panelHostDetails.gameObject.SetActive(false);
+                panelUsername.gameObject.SetActive(false);
+                panelGameplay.gameObject.SetActive(false);
+                panelGameOver.gameObject.SetActive(true);
                 break;
             default:
                 break;
@@ -86,6 +99,16 @@ public class ControllerGameClient : MonoBehaviour
         string name = inputUsername.text;
         Buffer packet = PacketBuilder.Join(name);
         SendPacketToServer(packet);
+    }
+
+    public void OnButtonRematch()
+    {
+        SendRematchPacket();
+    }
+
+    public void OnButtonQuit()
+    {
+        Application.Quit();
     }
 
     public async void TryToConnect(string host, int port)
@@ -141,7 +164,7 @@ public class ControllerGameClient : MonoBehaviour
                 if (joinResponse == 1 || joinResponse == 2 || joinResponse == 3)
                 {
                     SwitchToPanel(Panel.Gameplay);
-
+                    //SendChatPacket("this is a test");
                 }
                 else if (joinResponse == 9)
                 {
@@ -158,12 +181,26 @@ public class ControllerGameClient : MonoBehaviour
                 break;
             case "UPDT":
                 if (buffer.Length < 48) return; // not enough data for an UPDT packet
-                
+                SwitchToPanel(Panel.Gameplay);
                 byte whoseTurn = buffer.ReadUInt8(4);
                 byte gameStatus = buffer.ReadUInt8(5);
                 if (gameStatus != 0)
                 {
-                    print($"WINNER: {gameStatus}");
+                    SwitchToPanel(Panel.GameOver);
+                    switch (gameStatus)
+                    {
+                        case 1:
+                            winnerText.text = "Red Wins!";
+                            break;
+                        case 2:
+                            winnerText.text = "Blue Wins!";
+                            break;
+                        case 3:
+                            winnerText.text = "Tie Game!";
+                            break;
+                        default:
+                            break;
+                    }
                 }
                 //print(buffer);
                 byte[] spaces = new byte[42];
@@ -171,10 +208,10 @@ public class ControllerGameClient : MonoBehaviour
                 {
                     spaces[i] = buffer.ReadUInt8(6 + i);
                 }
-                SwitchToPanel(Panel.Gameplay);
+
                 //print(buffer);
                 buffer.Consume(48);
-                panelGameplay.UpdateFromServer(gameStatus, whoseTurn, spaces);
+                panelGameplay.UpdateFromServer(whoseTurn, spaces);
                 break;
             case "CHAT":
                 byte usernameLength = buffer.ReadByte(4);
@@ -188,6 +225,8 @@ public class ControllerGameClient : MonoBehaviour
                 string message = buffer.ReadString(7 + usernameLength, messageLength);
 
                 print($"{username}: {message}");
+                panelGameplay.AddMessageToChatDisplay(username, message);
+                //print($"{username}: {message}");
 
                 buffer.Consume(7 + usernameLength + messageLength);
                 break;
@@ -213,6 +252,12 @@ public class ControllerGameClient : MonoBehaviour
     public void SendChatPacket(string msg)
     {
         Buffer packet = PacketBuilder.Chat(msg);
+        SendPacketToServer(packet);
+    }
+
+    public void SendRematchPacket()
+    {
+        Buffer packet = PacketBuilder.Rematch();
         SendPacketToServer(packet);
     }
 }

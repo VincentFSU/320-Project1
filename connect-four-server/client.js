@@ -21,7 +21,7 @@ exports.Client = class Client {
     onData(data){
         // add new data to buffer:
         this.buffer = Buffer.concat([this.buffer, data]);
-        const lengthOfUsername = this.buffer.readUInt8(4); //gets one byte 4 bytes into the buffer
+        //const lengthOfUsername = this.buffer.readUInt8(4); //gets one byte 4 bytes into the buffer
         // parse buffer for packets:
         if(this.buffer.length < 4) return; // not enough data to process
         
@@ -58,19 +58,28 @@ exports.Client = class Client {
                 if(this.buffer.length < 6) return; // not enough data...
                 const msgLength = this.buffer.readUInt8(4);
                 const msg = this.buffer.slice(5, 5+msgLength).toString();
-
+                this.buffer = this.buffer.slice(5 + msgLength);
                 const msgPacket = PacketBuilder.chat(this.username, msg);
+                console.log(this.username + ": " + msg);
                 this.server.broadcastPacket(msgPacket);
             break;
             case "PLAY": 
                 if(this.buffer.length < 6) return; // not enough data...
                 const x = this.buffer.readUInt8(4);
                 const y = this.buffer.readUInt8(5);
-
-                console.log("user wants to play at: "+x+","+y);
+                if(this == this.server.game.clientRed || this == this.server.game.clientBlue){
+                    console.log("user wants to play at: "+x+","+y);
+                }
+                else{
+                    console.log("spectator wants to play at: "+x+","+y);
+                }
 
                 this.buffer = this.buffer.slice(6);
                 this.server.game.playMove(this, x, y);
+                break;
+            case "RMCH":
+                this.buffer = this.buffer.slice(4);
+                this.server.game.reset();
                 break;
             default:
                 console.log("ERROR: Packet identifier NOT recognized("+packetIdentifier+")");

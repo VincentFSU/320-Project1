@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.MemoryProfiler;
 
 public static class PacketBuilder
 {
@@ -31,6 +32,14 @@ public static class PacketBuilder
         packet.WriteString("PLAY");
         packet.WriteUInt8((byte)x, 4);
         packet.WriteUInt8((byte)y, 5);
+
+        return packet;
+    }
+
+    public static Buffer Rematch()
+    {
+        Buffer packet = Buffer.Alloc(4);
+        packet.WriteString("RMCH");
 
         return packet;
     }

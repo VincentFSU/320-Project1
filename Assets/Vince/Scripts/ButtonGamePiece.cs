@@ -4,6 +4,7 @@ using UnityEditor.Animations;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using UnityEngine.Audio;
 
 public struct GridPOS
 {
@@ -26,7 +27,9 @@ public class ButtonGamePiece : MonoBehaviour
     public Sprite spriteEmpty;
     public Sprite spriteRed;
     public Sprite spriteBlue;
+    public AudioClip clip;
 
+    private AudioSource audioSource;
     private Button bttn;
 
     public void Init(GridPOS pos, UnityAction callback)
@@ -37,6 +40,8 @@ public class ButtonGamePiece : MonoBehaviour
         //bttn.onClick.AddListener(new UnityEngine.Events.UnityAction(ButtonClicked));
         //bttn.onClick.AddListener(() => ButtonClicked());
         bttn.onClick.AddListener(callback);
+        audioSource = GetComponent<AudioSource>();
+        audioSource.clip = clip;
 
     }
     public void ButtonClicked()
@@ -49,19 +54,17 @@ public class ButtonGamePiece : MonoBehaviour
         if (b == 0)
         {
             bttn.image.sprite = spriteEmpty;
-            //textField.text = "";
+            audioSource.Play();
         }
         if (b == 1)
         {
             bttn.image.sprite = spriteRed;
-            //print($"X: {pos.X}, Y: {pos.Y}");
-            //textField.text = "X";
+            audioSource.Play();
         }
         if (b == 2)
         {
             bttn.image.sprite = spriteBlue;
-            //print($"X: {pos.X}, Y: {pos.Y}");
-            //textField.text = "O";
+            audioSource.Play();
         }
     }
 }

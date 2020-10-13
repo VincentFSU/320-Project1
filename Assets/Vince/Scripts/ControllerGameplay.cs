@@ -30,6 +30,7 @@ public class ControllerGameplay : MonoBehaviour
     public Sprite spriteRed;
     public Sprite spriteBlue;
     public Image imgTurnColor;
+    public Image imgPlayerColor;
 
     void Start()
     {
@@ -83,10 +84,27 @@ public class ControllerGameplay : MonoBehaviour
                 break;
         }
     }
-
-    public void UserDoneEditingMessage(string msg)
+    public void SetPlayerColor(int joinResponse)
     {
-        msg = inputField.text;
+        switch (joinResponse)
+        {
+            case 1:
+                imgPlayerColor.sprite = spriteRed;
+                break;
+            case 2:
+                imgPlayerColor.sprite = spriteBlue;
+                break;
+            case 3:
+                imgPlayerColor.sprite = null;
+                break;
+            default:
+                break;
+        }
+    }
+
+    public void UserDoneEditingMessage()
+    {
+        string msg = inputField.text;
 
         if (!new Regex(@"^(\s|\t)*$").IsMatch(msg))
         {

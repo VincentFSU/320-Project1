@@ -27,6 +27,7 @@ public class ControllerGameClient : MonoBehaviour
     public TMP_InputField inputUsername;
 
     public TextMeshProUGUI winnerText;
+    public TextMeshProUGUI errorText;
 
     public Transform panelHostDetails;
     public Transform panelUsername;
@@ -161,19 +162,39 @@ public class ControllerGameClient : MonoBehaviour
             case "JOIN":
                 if (buffer.Length < 5) return; // not enough data for a JOIN packet
                 byte joinResponse = buffer.ReadUInt8(4);
-                if (joinResponse == 1 || joinResponse == 2 || joinResponse == 3)
+                if (joinResponse == 1 || joinResponse == 2 || joinResponse == 3 )
                 {
-                    SwitchToPanel(Panel.Gameplay);
-                    //SendChatPacket("this is a test");
+                    panelGameplay.SetPlayerColor(joinResponse);
+                    SwitchToPanel(Panel.Gameplay);                    
+                }
+                else if (joinResponse == 4)
+                {
+                    errorText.text = "Username too short.";
+                    SwitchToPanel(Panel.Username);
+                }
+                else if (joinResponse == 5)
+                {
+                    errorText.text = "Username too long.";
+                }
+                else if (joinResponse == 6)
+                {
+                    errorText.text = "Username contains invalid characters.";
+                }
+                else if (joinResponse == 7)
+                {
+                    errorText.text = "Username already taken.";
+                }
+                else if (joinResponse == 8)
+                {
+                    errorText.text = "Username contains profanity.";
                 }
                 else if (joinResponse == 9)
                 {
-                    // server is full
-                    // TODO: Show error message to user
-                    SwitchToPanel(Panel.Username);
+                    errorText.text = "Server is full.";
                 }
                 else
                 {
+                    errorText.text = "Could not connect to server, unknown error.";
                     SwitchToPanel(Panel.Username);
                 }
 

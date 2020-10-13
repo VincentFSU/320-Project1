@@ -47,11 +47,6 @@ public class ControllerGameClient : MonoBehaviour
             DontDestroyOnLoad(gameObject); // don't destroy when loading a new scene
             SwitchToPanel(Panel.Host);
         }
-
-        //Buffer buff = Buffer.Alloc(4);
-        //buff.Concat(new byte[] { 1, 2, 3, 4 }, 0);
-        //buff.Consume(10);
-        //print(buff);
     }
 
     public void SwitchToPanel(Panel panel)
@@ -175,22 +170,27 @@ public class ControllerGameClient : MonoBehaviour
                 else if (joinResponse == 5)
                 {
                     errorText.text = "Username too long.";
+                    SwitchToPanel(Panel.Username);
                 }
                 else if (joinResponse == 6)
                 {
                     errorText.text = "Username contains invalid characters.";
+                    SwitchToPanel(Panel.Username);
                 }
                 else if (joinResponse == 7)
                 {
                     errorText.text = "Username already taken.";
+                    SwitchToPanel(Panel.Username);
                 }
                 else if (joinResponse == 8)
                 {
                     errorText.text = "Username contains profanity.";
+                    SwitchToPanel(Panel.Username);
                 }
                 else if (joinResponse == 9)
                 {
                     errorText.text = "Server is full.";
+                    SwitchToPanel(Panel.Username);
                 }
                 else
                 {
@@ -245,9 +245,7 @@ public class ControllerGameClient : MonoBehaviour
                 string username = buffer.ReadString(7, usernameLength);
                 string message = buffer.ReadString(7 + usernameLength, messageLength);
 
-                print($"{username}: {message}");
                 panelGameplay.AddMessageToChatDisplay(username, message);
-                //print($"{username}: {message}");
 
                 buffer.Consume(7 + usernameLength + messageLength);
                 break;

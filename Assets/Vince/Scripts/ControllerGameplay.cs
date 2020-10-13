@@ -19,8 +19,6 @@ public class ControllerGameplay : MonoBehaviour
 
     public ButtonGamePiece bttnPrefab;
 
-    //private Player whoseTurn = Player.PlayerRed;
-    //private Player[,] boardData; // all of the data of who owns what
     private ButtonGamePiece[,] boardUI; // all of the buttons
 
     public Transform panelGameBoard; // grid of buttons
@@ -66,11 +64,6 @@ public class ControllerGameplay : MonoBehaviour
             int x = i % 7;
             int y = i / 7;
             boardUI[x, y].SetOwner(b);
-
-            //if (b != 0)
-            //{
-                //print($"b: {b} | x: {x} | y: {y} ");
-            //}
         }
         switch (whoseTurn)
         {

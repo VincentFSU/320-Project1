@@ -29,6 +29,7 @@ exports.PacketBuilder = {
                 offset++;
             }
         }
+        console.log("UPDT:")
         console.log(packet);
         return packet;
     }    

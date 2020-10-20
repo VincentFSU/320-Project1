@@ -48,10 +48,12 @@ exports.Client = class Client {
                 const packet = PacketBuilder.join(responseId);
                 this.sendPacket(packet);
 
-                if (responseId <= 3 && responseId > 0) this.username = desiredUsername;
-
-                const packet2 = PacketBuilder.update(this.server.game);
-                this.sendPacket(packet2);
+                if (responseId <= 3 && responseId > 0) 
+                {
+                    this.username = desiredUsername;
+                    const packet2 = PacketBuilder.update(this.server.game);
+                    this.sendPacket(packet2);
+                }
 
                  break;
             case "CHAT": 
